@@ -1,0 +1,21 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: meeting-room-db-2
+    environment:
+      POSTGRES_DB: meeting_room_db_2
+      POSTGRES_USER: bianca
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bianca -d meeting_room_db_2"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
