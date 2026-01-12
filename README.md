@@ -6,7 +6,7 @@ API REST em Java com Spring Boot para gerenciamento de **salas de reunião**, **
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - **Usuários**
   - Cadastro de usuários
@@ -29,7 +29,7 @@ API REST em Java com Spring Boot para gerenciamento de **salas de reunião**, **
 
 ---
 
-## 🧱 Stack Tecnológica
+## Stack Tecnológica
 
 - **Linguagem:** Java
 - **Framework:** Spring Boot
@@ -44,7 +44,7 @@ API REST em Java com Spring Boot para gerenciamento de **salas de reunião**, **
 
 ---
 
-## 🏛 Arquitetura da Aplicação
+## Arquitetura da Aplicação
 
 O projeto segue uma arquitetura em camadas:
 
@@ -58,9 +58,9 @@ O projeto segue uma arquitetura em camadas:
 
 ---
 
-## 🌐 Endpoints principais
+## Endpoints principais
 
-### 👤 Usuários (`/users`)
+### Usuários (`/users`)
 - `POST /users` → cria usuário
 - `PATCH /users/{id}` → atualização parcial
 - `GET /users?name={nome}` → busca por nome
@@ -68,14 +68,14 @@ O projeto segue uma arquitetura em camadas:
 
 ---
 
-### 🏢 Salas de reunião (`/meeting-rooms`)
+### Salas de reunião (`/meeting-rooms`)
 - `POST /meeting-rooms` → cria sala
 - `GET /meeting-rooms/{code}` → busca sala por código
 - `DELETE /meeting-rooms/{code}` → remove sala
 
 ---
 
-### 📅 Reservas (`/bookings`)
+### Reservas (`/bookings`)
 - `POST /bookings` → cria reserva com as regras:
   - `start` deve ser anterior a `end`
   - sala deve estar `ACTIVE`
@@ -84,7 +84,7 @@ O projeto segue uma arquitetura em camadas:
 
 ---
 
-## ✅ Regras de Negócio Importantes
+## Regras de Negócio Importantes
 
 - **Validação de horário**
   - `start` < `end`, caso contrário retorna `400 BAD_REQUEST`
@@ -98,16 +98,16 @@ O projeto segue uma arquitetura em camadas:
 
 ---
 
-## 🚀 Como rodar o projeto
+## Como rodar o projeto
 
-### ✔️ Pré-requisitos
+### Pré-requisitos
 - Java (versão definida no `build.gradle.kts`)
 - Git
 - **Opcional:** Docker
 
 ---
 
-### ▶️ Rodando localmente
+### Rodando localmente
 ```bash
 git clone https://github.com/biancapasch/meeting-room-booking-2.git
 cd meeting-room-booking-2
@@ -123,7 +123,7 @@ http://localhost:8080
 
 ---
 
-### 🐳 Rodando com Docker (opcional)
+### Rodando com Docker (opcional)
 
 Se quiser subir com Docker Compose:
 
@@ -133,7 +133,7 @@ docker-compose up --build
 
 ---
 
-## 🧪 Testes
+## Testes
 
 Para rodar os testes automatizados:
 
@@ -143,7 +143,7 @@ Para rodar os testes automatizados:
 
 ---
 
-## ✍️ Próximos passos (melhorias sugeridas)
+## Próximos passos (melhorias sugeridas)
 
 - Paginação e filtros nas listagens
 - Documentação com Swagger/OpenAPI
@@ -153,6 +153,6 @@ Para rodar os testes automatizados:
 
 ---
 
-## 📄 Licença
+## Licença
 
 Projeto de estudo. Uso livre para fins educacionais.
