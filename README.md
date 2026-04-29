@@ -1,141 +1,154 @@
 # Meeting Room Booking API
 
-API REST em Java com Spring Boot para gerenciamento de **salas de reunião**, **usuários** e **reservas**, com validações de regra de negócio e prevenção de conflitos de horário.
+A REST API built with Java and Spring Boot for managing meeting rooms, users, and reservations.
 
-> Projeto de estudo focado em backend, boas práticas com Spring e modelagem de domínio.
-
----
-
-## Funcionalidades
-
-- **Usuários**
-  - Cadastro de usuários
-  - Atualização parcial com `PATCH`
-  - Busca de usuário por nome
-  - Remoção de usuários
-
-- **Salas de reunião**
-  - Cadastro de salas com código, nome, capacidade e status (`ACTIVE` / `INACTIVE`)
-  - Busca de sala pelo código
-  - Remoção de sala
-  - Status padrão `ACTIVE` quando não informado
-
-- **Reservas**
-  - Criação de reserva vinculada a **usuário** e **sala**
-  - Validação de intervalo de tempo (`start < end`)
-  - Sala precisa estar ativa (`ACTIVE`)
-  - Prevenção de **conflitos de horário** usando regra de intervalo `[start, end)`
-  - Listagem de todas as reservas cadastradas
+This project simulates a real-world booking system, focusing on domain modeling, business rule validation, conflict prevention, and backend best practices.
 
 ---
 
-## Stack Tecnológica
+## Features
 
-- **Linguagem:** Java
-- **Framework:** Spring Boot
-  - Spring Web
-  - Spring Data JPA
-  - Bean Validation (Jakarta Validation)
-- **Banco:** configurável via `docker-compose` ou local
-- **Build:** Gradle (Kotlin DSL)
-- **Outros:**
-  - Lombok
-  - Testes automatizados (service/controller)
+### User Management
+- Create users
+- Partially update users using PATCH
+- Search users by name
+- Delete users
 
----
+### Meeting Room Management
+- Create meeting rooms with code, name, capacity, and status
+- Retrieve rooms by code
+- Delete rooms
+- Automatically set ACTIVE as default status
 
-## Arquitetura da Aplicação
-
-O projeto segue uma arquitetura em camadas:
-
-- `controller` → expõe os endpoints REST
-- `service` → contém a regra de negócio
-- `repository` → abstrai o acesso ao banco
-- `entity` → modelos JPA que representam as tabelas
-- `dtos` → objetos para dados de entrada/saída
-- `mapper` → conversão entre entity e DTO
-- `exceptions` → exceções de domínio (ex.: sala inativa, usuário não encontrado)
+### Booking Management
+- Create bookings linked to users and meeting rooms
+- Validate booking time intervals
+- Ensure rooms are active before booking
+- Prevent overlapping bookings
+- Retrieve all bookings
 
 ---
 
-## Endpoints principais
+## Business Rules
 
-### Usuários (`/users`)
-- `POST /users` → cria usuário
-- `PATCH /users/{id}` → atualização parcial
-- `GET /users?name={nome}` → busca por nome
-- `DELETE /users/{id}` → remove usuário
+This project implements important reservation system rules:
 
----
+- Booking start time must be earlier than end time
+- Meeting rooms must be active to accept reservations
+- Bookings cannot overlap in the same room
+- Conflict validation follows the interval logic `[start, end)`
 
-### Salas de reunião (`/meeting-rooms`)
-- `POST /meeting-rooms` → cria sala
-- `GET /meeting-rooms/{code}` → busca sala por código
-- `DELETE /meeting-rooms/{code}` → remove sala
+These validations simulate real scheduling systems used in corporate environments.
 
 ---
 
-### Reservas (`/bookings`)
-- `POST /bookings` → cria reserva com as regras:
-  - `start` deve ser anterior a `end`
-  - sala deve estar `ACTIVE`
-  - não pode haver sobreposição de horários
-- `GET /bookings` → lista reservas
+## Architecture
+
+This project follows a layered architecture:
+
+```text
+Controller → Service → Repository → Database
+```
+
+### Layers
+
+- **Controller** → exposes REST endpoints
+- **Service** → business logic implementation
+- **Repository** → persistence layer abstraction
+- **Entity** → JPA domain models
+- **DTOs** → request and response data transfer
+- **Mapper** → entity ↔ DTO conversion
+- **Exceptions** → domain exception handling
 
 ---
 
-## Regras de Negócio Importantes
+## Main Endpoints
 
-- **Validação de horário**
-  - `start` < `end`, caso contrário retorna `400 BAD_REQUEST`
+### Users
 
-- **Sala ativa**
-  - se `status == INACTIVE`, lança `InactiveMeetingRoomException`
-
-- **Conflito de horário**
-  - o repositório usa `existsOverlap(...)` para impedir reservas que se sobreponham
-  - faixa considerada: `[start, end)`
-
----
-
-## Como rodar o projeto
-
-### Pré-requisitos
-- Java (versão definida no `build.gradle.kts`)
-- Git
-- **Opcional:** Docker
+```http
+POST /users
+PATCH /users/{id}
+GET /users?name={name}
+DELETE /users/{id}
+```
 
 ---
 
-### Rodando localmente
+### Meeting Rooms
+
+```http
+POST /meeting-rooms
+GET /meeting-rooms/{code}
+DELETE /meeting-rooms/{code}
+```
+
+---
+
+### Bookings
+
+```http
+POST /bookings
+GET /bookings
+```
+
+Booking validations:
+- `start` must be before `end`
+- room must be ACTIVE
+- no overlapping reservations allowed
+
+---
+
+## Tech Stack
+
+- Java
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Bean Validation
+- PostgreSQL
+- Gradle (Kotlin DSL)
+- Docker
+- Lombok
+- JUnit
+- Mockito
+
+---
+
+## Running the Project
+
+### Clone repository
+
 ```bash
 git clone https://github.com/biancapasch/meeting-room-booking-2.git
 cd meeting-room-booking-2
+```
 
+---
+
+### Start application
+
+```bash
 ./gradlew bootRun
 ```
 
-A API estará acessível via:
+Application runs at:
 
-```
+```text
 http://localhost:8080
 ```
 
 ---
 
-### Rodando com Docker (opcional)
-
-Se quiser subir com Docker Compose:
+## Running with Docker
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 ---
 
-## Testes
-
-Para rodar os testes automatizados:
+## Running Tests
 
 ```bash
 ./gradlew test
@@ -143,16 +156,17 @@ Para rodar os testes automatizados:
 
 ---
 
-## Próximos passos (melhorias sugeridas)
+## Future Improvements
 
-- Paginação e filtros nas listagens
-- Documentação com Swagger/OpenAPI
-- Autenticação e autorização (Spring Security)
-- Deployment em ambiente cloud
-- Mais testes de integração
+- Pagination and filters
+- Swagger/OpenAPI documentation
+- Authentication and authorization
+- Cloud deployment
+- Integration tests
 
 ---
 
-## Licença
+## Author
 
-Projeto de estudo. Uso livre para fins educacionais.
+Bianca Paschoal  
+GitHub: https://github.com/biancapasch
